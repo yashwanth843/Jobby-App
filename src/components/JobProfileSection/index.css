@@ -117,6 +117,7 @@
   justify-content: center;
   align-items: center;
   width: 1000px;
+  margin-top: 150px;
 }
 .no-jobs {
   width: 400px;
@@ -141,4 +142,16 @@
   font-family: 'Roboto';
   font-weight: 400;
   color: #fff;
+}
+
+.retryButton {
+  background-color: blue;
+  color: #ffffff;
+  font-family: 'Roboto';
+  border: none;
+  border-radius: 10px;
+  width: 120px;
+  height: 30px;
+  margin-top: 15px;
+  cursor: pointer;
 }

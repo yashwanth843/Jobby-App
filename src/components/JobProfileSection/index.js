@@ -44,6 +44,18 @@ const salaryRangesList = [
   },
 ]
 
+const locations = [
+  {locationId: 'HYDERABAD', location: 'Hyderabad'},
+
+  {locationId: 'BANGALORE', location: 'Bangalore'},
+
+  {locationId: 'CHENNAI', location: 'Chennai'},
+
+  {locationId: 'DELHI', location: 'Delhi'},
+
+  {locationId: 'MUMBAI', location: 'Mumbai'},
+]
+
 const apiStatusConstants = {
   initial: 'INITIAL',
   inProgress: 'INPROGRESS',
@@ -58,6 +70,7 @@ class JobProfileSection extends Component {
     employmentType: [],
     salaryRange: 0,
     apiStatus: apiStatusConstants.initial,
+    locate: '',
   }
 
   componentDidMount() {
@@ -70,7 +83,7 @@ class JobProfileSection extends Component {
     })
 
     const jwtToken = Cookies.get('jwt_token')
-    const {salaryRange, employmentType, searchInput} = this.state
+    const {salaryRange, employmentType, searchInput, locate} = this.state
     const url = `https://apis.ccbp.in/jobs?employment_type=${employmentType.join()}&minimum_package=${salaryRange}&search=${searchInput}`
     const options = {
       headers: {
@@ -81,7 +94,6 @@ class JobProfileSection extends Component {
     const response = await fetch(url, options)
     if (response.ok === true) {
       const data = await response.json()
-      console.log(data)
       const updatedData = data.jobs.map(eachJob => ({
         companyLogoUrl: eachJob.company_logo_url,
         employmentType: eachJob.employment_type,
@@ -106,6 +118,14 @@ class JobProfileSection extends Component {
 
   changeSearchInput = event => {
     this.setState({searchInput: event.target.value})
+  }
+
+  onChangeLocation = location => {
+    // const {jobsList} = this.state
+    // const filted = jobsList.filter(job => job.location === location)
+    // this.setState({jobsList: filted}, this.getJobDetails)
+    this.setState({locate: location}, this.getJobDetails)
+    console.log(location)
   }
 
   onKeyDown = event => {
@@ -160,6 +180,7 @@ class JobProfileSection extends Component {
           type="button"
           data-testid="retry"
           onClick={this.onClickRetryButton}
+          className="retryButton"
         >
           Retry
         </button>
@@ -211,7 +232,9 @@ class JobProfileSection extends Component {
   }
 
   render() {
-    const {searchInput} = this.state
+    const {searchInput, jobsList} = this.state
+    const result = jobsList.map(each => each.location)
+    console.log(result)
     return (
       <div className="job-details-container">
         <div className="render-group-items">
@@ -223,6 +246,9 @@ class JobProfileSection extends Component {
             searchInput={searchInput}
             changeSearchInput={this.changeSearchInput}
             getJobDetails={this.getJobDetails}
+            jobsList={this.jobsList}
+            onChangeJobs={locations}
+            onChangePlace={this.onChangeLocation}
           />
         </div>
         <div className="responsive-items">
