@@ -70,7 +70,7 @@ class JobProfileSection extends Component {
     employmentType: [],
     salaryRange: 0,
     apiStatus: apiStatusConstants.initial,
-    locate: '',
+    locate: [],
   }
 
   componentDidMount() {
@@ -104,8 +104,21 @@ class JobProfileSection extends Component {
         rating: eachJob.rating,
         title: eachJob.title,
       }))
+      let filteredData = updatedData
+      if (locate.length !== 0) {
+        filteredData = updatedData.filter(job => {
+          let isLocationIncluded = false
+          locate.forEach(location => {
+            if (job.location === location) {
+              isLocationIncluded = true
+            }
+            return isLocationIncluded
+          })
+          return isLocationIncluded
+        })
+      }
       this.setState({
-        jobsList: updatedData,
+        jobsList: filteredData,
         apiStatus: apiStatusConstants.success,
         searchInput: '',
       })
@@ -121,10 +134,8 @@ class JobProfileSection extends Component {
   }
 
   onChangeLocation = location => {
-    // const {jobsList} = this.state
-    // const filted = jobsList.filter(job => job.location === location)
-    // this.setState({jobsList: filted}, this.getJobDetails)
-    this.setState({locate: location}, this.getJobDetails)
+    const {locate} = this.state
+    this.setState({locate: [...locate, location]}, this.getJobDetails)
     console.log(location)
   }
 
